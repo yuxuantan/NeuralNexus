@@ -6,21 +6,25 @@ import pandas as pd
 
 bc = BrokerController()
 gc = GsheetController()
-dbc = DbController()
 yfc = YFinanceController()
 
-'''get options extreme price'''
+'''get all positions'''
+pos = bc.get_my_open_pos()
+# print(bc.convert_pretty_table(pos))
+'''(done) - incorporate retracement profit taking - get all recommendations'''
+actions = bc.get_my_recommended_actions(pos)
+print(bc.convert_pretty_table(actions))
+
+
+# '''get options extreme price'''
 # print(bc.get_extreme_option_price(1666324800000, 'TSLA  230210P00180000', 'SELL'))
 # print(bc.get_current_option_price('TSLA  230210P00180000'))
 
 # '''(fix) get filled orders - ONLY those that are not closed yet'''
-open_filled_orders = bc.get_open_filled_orders()
-print(bc.convert_pretty_table(open_filled_orders))
+# open_filled_orders = bc.get_open_filled_orders()
+# print(bc.convert_pretty_table(open_filled_orders))
 
 
-# '''(done) - incorporate retracement profit taking - get all recommendations'''
-# actions = bc.get_my_recommended_actions(open_filled_orders)
-# print(bc.convert_pretty_table(actions))
 
 
 
@@ -30,9 +34,7 @@ print(bc.convert_pretty_table(open_filled_orders))
 # dbController.insert_into_table('hello', '4,2,3,4')
 # dbController.select_all_from_table('hello')
 
-'''get all positions'''
-# pos_tbl = brokerController.get_my_open_pos()[0]
-# print(pos_tbl)
+
 
 # TODO: 
 '''

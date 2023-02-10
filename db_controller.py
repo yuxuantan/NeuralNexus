@@ -7,36 +7,32 @@ class DbController():
         # Create a cursor object to execute SQL commands
         self._cursor = self._conn.cursor()
 
-    def drop_table(self, table_name):
+    def drop_table(self, table_name = "tbl"):
         # drop table
         self._cursor.execute(f"DROP TABLE {table_name}")
 
-    def create_table(self, table_name):
+    def create_table(self, table_name = "tbl"):
         # Create a table to store data
         self._cursor.execute(f"""CREATE TABLE IF NOT EXISTS {table_name} (
-            id INTEGER PRIMARY KEY,
-            name TEXT,
-            age INTEGER,
-            address TEXT
+            contract TEXT PRIMARY KEY,
+            entered_date TEXT,
+            last_updated_date TEXT
             )""")
 
-
-    def insert_into_table(self, table_name, values_csv):
-        # Insert data into the table
-        self._cursor.execute(f"INSERT INTO {table_name} VALUES ({values_csv})")
-        # Save the changes
+    def run_dml(self, dml):
+        self._cursor.execute(dml)
         self._conn.commit()
 
-
-    def select_all_from_table(self, table_name):
-        # Query the data
-        self._cursor.execute(f"SELECT * FROM {table_name}")
-        # Fetch all the results
-        results = self._cursor.fetchall()
-        # Iterate through the results and print them
-        for result in results:
-            print(result)
+    def run_query(self, query):
+        results = self._cursor.execute(query).fetchone()
+        return results
     
     def close_conn(self):
         # Close the connection
         self._conn.close()
+
+if __name__ == "__main__":
+    dbc = DbController()
+    dbc.create_table()
+    dbc.run_query("insert into tbl values('AAPL/STK/USD','2023-01-01','2023-02-10')")
+    dbc._conn.commit()
