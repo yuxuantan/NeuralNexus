@@ -3,7 +3,7 @@ import sqlite3
 class DbController():
     def __init__(self):
         # Connect to or create the database file
-        self._conn = sqlite3.connect("mydatabase.db")
+        self._conn = sqlite3.connect("mydatabase.db", check_same_thread=False)
         # Create a cursor object to execute SQL commands
         self._cursor = self._conn.cursor()
 

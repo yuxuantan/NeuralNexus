@@ -2,24 +2,42 @@ from broker_controller import BrokerController
 from gsheet_controller import GsheetController
 from db_controller import DbController
 from yfinance_controller import YFinanceController
-import pandas as pd
+import telebot
+
 
 bc = BrokerController()
 gc = GsheetController()
 yfc = YFinanceController()
 
+'''chatbot'''
+# only privatise my chat id
+whitelist = [27392018]
+bot=telebot.TeleBot("5244204118:AAFLg6BjMqgfv6WNclKVDaIEgKcZhPnK818")
 '''get all positions'''
-pos = bc.get_my_open_pos()
-# print(bc.convert_pretty_table(pos))
-''' incorporate retracement profit taking - get all recommendations'''
-pos_with_recommendations = bc.get_my_recommended_actions(pos)
-print(bc.convert_pretty_table(pos_with_recommendations))
-gc.write(pos_with_recommendations, "open pos")
+@bot.message_handler(commands=['recommended'])
+def telegram_get_recommend(message):
+    pos = bc.get_my_open_pos()
+    ''' incorporate retracement profit taking - get all recommendations'''
+    pos_with_recommendations = bc.get_my_recommended_actions(pos)
+    msg = bc.convert_pretty_table(pos_with_recommendations)
+    print(msg)
+    if message.chat.id in whitelist:
+        bot.send_message(message.chat.id, msg)
+    gc.write(pos_with_recommendations, "open pos")
 
 '''get all filled orders'''
-filled_orders = bc.get_filled_orders()
-print(bc.convert_pretty_table(filled_orders))
-gc.write(filled_orders, "all trades")
+@bot.message_handler(commands=['filled'])
+def telegram_get_filled_orders(message):
+    filled_orders = bc.get_filled_orders()
+    msg = bc.convert_pretty_table(filled_orders)
+    print(message)
+    if message.chat.id in whitelist:
+        bot.send_message(message.chat.id, msg)
+    gc.write(filled_orders, "all trades")
+
+
+bot.polling()
+
 # '''get options extreme price'''
 # print(bc.get_extreme_option_price(1666324800000, 'TSLA  230210P00180000', 'SELL'))
 # print(bc.get_current_option_price('TSLA  230210P00180000'))
