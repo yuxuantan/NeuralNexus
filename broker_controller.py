@@ -161,7 +161,7 @@ class BrokerController():
         return positions_dict
     
 
-    def get_open_filled_orders(self):
+    def get_filled_orders(self):
         segments = self.get_time_segments_for_filled_orders()
         filled_orders = []
         for s in segments:
@@ -171,29 +171,31 @@ class BrokerController():
             
         filled_orders = [{
                     'id': order.id,
-                    'trade_time': datetime.fromtimestamp(order.trade_time/1000),
+                    'trade_time': str(datetime.fromtimestamp(order.trade_time/1000)),
+                    # 'trade_time': order.trade_time,
                     'action' : order.action,
                     'qty' : order.filled,
                     'avg_fill_price' : order.avg_fill_price,
                     'contract' : str(order.contract)
                 } for order in filled_orders ]
         filled_orders = sorted(filled_orders, key=lambda x: x['trade_time'])
-        open_orders = filled_orders.copy()
+        # open_orders = filled_orders.copy()
         
-        for i, fo in enumerate(filled_orders):
-            # print('looping..' + fo['contract']+' ' +str(fo['id']))
-            for j, oo in enumerate(filled_orders[i+1:]):                
-                # print('comparing..' + oo['contract'] +' ' +str(oo['id']))
-                if fo['contract'] == oo['contract'] and fo['id'] != oo['id'] and fo['action'] != oo['action'] and fo['qty'] == oo['qty']:  
-                    # print('MATCH! removing..'+ str(fo['id']) +' & '+ str(oo['id']))
-                    open_orders.remove(oo)
-                    open_orders.remove(fo)
-                    filled_orders.remove(oo)
-                    break
+        # for i, fo in enumerate(filled_orders):
+        #     # print('looping..' + fo['contract']+' ' +str(fo['id']))
+        #     for j, oo in enumerate(filled_orders[i+1:]):                
+        #         # print('comparing..' + oo['contract'] +' ' +str(oo['id']))
+        #         if fo['contract'] == oo['contract'] and fo['id'] != oo['id'] and fo['action'] != oo['action'] and fo['qty'] == oo['qty']:  
+        #             # print('MATCH! removing..'+ str(fo['id']) +' & '+ str(oo['id']))
+        #             open_orders.remove(oo)
+        #             open_orders.remove(fo)
+        #             filled_orders.remove(oo)
+        #             break
 
-        open_orders = [o for o in open_orders if o.get('contract').split('/')[1] != "OPT" or (o.get('contract').split('/')[1] == "options" and  datetime.now().strftime("%y%m%d")> o.get('contract').split('/')[0].split(' ')[1][:6])]
+        # open_orders = [o for o in open_orders if o.get('contract').split('/')[1] != "OPT" or (o.get('contract').split('/')[1] == "options" and  datetime.now().strftime("%y%m%d")> o.get('contract').split('/')[0].split(' ')[1][:6])]
 
-        return open_orders
+        # return open_orders
+        return filled_orders
 
 
     '''
