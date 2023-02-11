@@ -16,16 +16,12 @@ from db_controller import DbController
 class BrokerController():
     def __init__(self, sandbox=False):
         self._client_config = TigerOpenClientConfig(sandbox_debug=sandbox)
-        # client_config.private_key = read_private_key('path of rsa private key')
-        
-        '''PAPER ACC'''
-        self._client_config.private_key = "MIICXQIBAAKBgQDJ5SnACzP/YeWp2Sd3nDFmT4zmZfr/9/PDi+q7wYPUJBbJ4OsA7tcBduCAwPqLjEPKZ4aO46QfUAzqRH1b7Hlp9JgPn2EykL11lKjbQxjy3itx8IyiGiaU/O+nZtNWWJtGWkmphwnJAroopXtO6c69AH3pwrfokloQlfeRiZIAYQIDAQABAoGBAKBWZXzFqOrlhW4JLkXYfobhIGYNkXPdJ/MhWC76NUaxzoNPI3MfOxNHpG28VH2kzGWfKAaslLflbAxUjjYFrDlnQ+by+05gNWSeEibkKUH8ooIu1NXhAyqwTDn46OJd50lAMrDynns3EOb7982+p29dAAm7q3cmieki8xjI18cBAkEA55lH/Sq1446NnHDll7ucJsBPDiLRxOwa3d1MjKj3OfDefV3TuQWP/9hih4pQP+PnB0x6BvvZetUOrsDVr4Gk8QJBAN8qtkQ7NknRc/dg7pmLLf2hKJLYND2sQZvjJkLz5ro9Hi3zd9o6M1jjdzU/NRTLGwxsSMY4W8sBScAUfJazUnECQE8aG2xs2hMO7W8xYDmi6oKRzG6Xle4cdlCw9SRV0ZsImfVXxqi7LaPE1GJW63Hm9VGY3VTlUDKT8p/dXR7EuQECQGka4rEL+iuWHDn8SyPBqy1zA3r1nNUXFednehO6b4ZzVo1px57eHmTU7MYFOOjMJ7cYIMZKsODRgHyYqX0Ig+ECQQDeqwc6WsfeQ9QOW9du0ObgI5PCuDz6ybp773sgAaegai+bQjVNEDReYM2DqpIDEyTmRs6Nd6CgIW+eual8Kar8"
-        self._client_config.tiger_id = '20151980'
-        self._client_config.account = '20221219001727127' 
-        '''ACTUAL ACC'''
-        # self._client_config.private_key = "MIICXQIBAAKBgQDJ5SnACzP/YeWp2Sd3nDFmT4zmZfr/9/PDi+q7wYPUJBbJ4OsA7tcBduCAwPqLjEPKZ4aO46QfUAzqRH1b7Hlp9JgPn2EykL11lKjbQxjy3itx8IyiGiaU/O+nZtNWWJtGWkmphwnJAroopXtO6c69AH3pwrfokloQlfeRiZIAYQIDAQABAoGBAKBWZXzFqOrlhW4JLkXYfobhIGYNkXPdJ/MhWC76NUaxzoNPI3MfOxNHpG28VH2kzGWfKAaslLflbAxUjjYFrDlnQ+by+05gNWSeEibkKUH8ooIu1NXhAyqwTDn46OJd50lAMrDynns3EOb7982+p29dAAm7q3cmieki8xjI18cBAkEA55lH/Sq1446NnHDll7ucJsBPDiLRxOwa3d1MjKj3OfDefV3TuQWP/9hih4pQP+PnB0x6BvvZetUOrsDVr4Gk8QJBAN8qtkQ7NknRc/dg7pmLLf2hKJLYND2sQZvjJkLz5ro9Hi3zd9o6M1jjdzU/NRTLGwxsSMY4W8sBScAUfJazUnECQE8aG2xs2hMO7W8xYDmi6oKRzG6Xle4cdlCw9SRV0ZsImfVXxqi7LaPE1GJW63Hm9VGY3VTlUDKT8p/dXR7EuQECQGka4rEL+iuWHDn8SyPBqy1zA3r1nNUXFednehO6b4ZzVo1px57eHmTU7MYFOOjMJ7cYIMZKsODRgHyYqX0Ig+ECQQDeqwc6WsfeQ9QOW9du0ObgI5PCuDz6ybp773sgAaegai+bQjVNEDReYM2DqpIDEyTmRs6Nd6CgIW+eual8Kar8"
-        # self._client_config.tiger_id = '20151980'
-        # self._client_config.account = '50971581' 
+        self._client_config.private_key = read_private_key('./tiger_creds.json')
+        self._client_config.tiger_id = "20151980"
+        self._client_config.account = '50971581' 
+        # paper acc
+        # self._client_config.account = '20221219001727127' 
+      
 
         self._client_config.timezone = 'US/Eastern' # default timezone 
 

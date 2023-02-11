@@ -3,6 +3,7 @@ from gsheet_controller import GsheetController
 from db_controller import DbController
 from yfinance_controller import YFinanceController
 import telebot
+from telebot import util
 
 
 bc = BrokerController()
@@ -19,22 +20,29 @@ def telegram_get_recommend(message):
     pos = bc.get_my_open_pos()
     ''' incorporate retracement profit taking - get all recommendations'''
     pos_with_recommendations = bc.get_my_recommended_actions(pos)
-    msg = bc.convert_pretty_table(pos_with_recommendations)
-    print(msg)
-    if message.chat.id in whitelist:
-        bot.send_message(message.chat.id, msg)
     gc.write(pos_with_recommendations, "open pos")
+
+    msg = bc.convert_pretty_table(pos_with_recommendations)
+    splitted_msg = util.split_string(str(msg), 4000)
+    if message.chat.id in whitelist:
+        for m in splitted_msg:
+            bot.send_message(message.chat.id, m)
+    print(msg)
 
 '''get all filled orders'''
 @bot.message_handler(commands=['filled'])
 def telegram_get_filled_orders(message):
     filled_orders = bc.get_filled_orders()
-    msg = bc.convert_pretty_table(filled_orders)
-    print(message)
-    if message.chat.id in whitelist:
-        bot.send_message(message.chat.id, msg)
     gc.write(filled_orders, "all trades")
 
+    msg = bc.convert_pretty_table(filled_orders)
+
+    splitted_msg = util.split_string(str(msg), 4000)
+    if message.chat.id in whitelist:
+        for m in splitted_msg:
+            bot.send_message(message.chat.id, m)
+
+    print(msg)
 
 bot.polling()
 

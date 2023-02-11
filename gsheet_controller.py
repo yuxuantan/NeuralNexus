@@ -11,11 +11,6 @@ class GsheetController():
         print(gsheet_name)
         self._sh = client.open(gsheet_name)
 
-        # self._test_sheet = client.open(gsheet_name).get_worksheet(2)
-
-    def print_overview(self):
-        networth = self._fin_status_sheet.acell('D3').value
-        print(f"networth: ${networth}")
 
     def write(self, text, ws_name):
         df = pd.DataFrame.from_dict(text)
