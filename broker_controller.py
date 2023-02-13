@@ -12,14 +12,19 @@ import pandas as pd
 
 from yfinance_controller import YFinanceController
 from db_controller import DbController
+import os
 
 class BrokerController():
     def __init__(self, sandbox=False):
         self._client_config = TigerOpenClientConfig(sandbox_debug=sandbox)
-        self._client_config.private_key = read_private_key('./tiger_creds.json')
+        try:
+            self._client_config.private_key = os.environ["TIGER_PRIVATE_KEY"]
+        except KeyError:
+            self._client_config.private_key = read_private_key('./tiger_creds.json')
+
         self._client_config.tiger_id = "20151980"
         self._client_config.account = '50971581' 
-        # paper acc
+        ''' paper acc'''
         # self._client_config.account = '20221219001727127' 
       
 
@@ -87,7 +92,7 @@ class BrokerController():
             pl_perc = pos.get('pl_perc')
             entered_date = self._dbc.run_query(f"select entered_date from tbl where contract = '{contract}'")
             if entered_date is None:
-                entered_date = {datetime.now().date()}
+                entered_date = str(datetime.now().date())
                 self._dbc.run_dml(f"INSERT INTO tbl VALUES ('{contract}','{datetime.now().date()}','{datetime.now().date()}')")
             else:
                 entered_date = entered_date[0]

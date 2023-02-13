@@ -11,12 +11,10 @@ gc = GsheetController()
 yfc = YFinanceController()
 
 '''chatbot'''
-# only privatise my chat id
-whitelist = [27392018]
+my_chat_id = 27392018
 bot=telebot.TeleBot("5244204118:AAFLg6BjMqgfv6WNclKVDaIEgKcZhPnK818")
 '''get all positions'''
-@bot.message_handler(commands=['recommended'])
-def telegram_get_recommend(message):
+def telegram_get_recommend():
     pos = bc.get_my_open_pos()
     ''' incorporate retracement profit taking - get all recommendations'''
     pos_with_recommendations = bc.get_my_recommended_actions(pos)
@@ -24,27 +22,27 @@ def telegram_get_recommend(message):
 
     msg = bc.convert_pretty_table(pos_with_recommendations)
     splitted_msg = util.split_string(str(msg), 4000)
-    if message.chat.id in whitelist:
-        for m in splitted_msg:
-            bot.send_message(message.chat.id, m)
+    
+    for m in splitted_msg:
+        bot.send_message(my_chat_id, m)
     print(msg)
 
 '''get all filled orders'''
-@bot.message_handler(commands=['filled'])
-def telegram_get_filled_orders(message):
+def telegram_get_filled_orders():
     filled_orders = bc.get_filled_orders()
     gc.write(filled_orders, "all trades")
 
     msg = bc.convert_pretty_table(filled_orders)
 
     splitted_msg = util.split_string(str(msg), 4000)
-    if message.chat.id in whitelist:
-        for m in splitted_msg:
-            bot.send_message(message.chat.id, m)
+    for m in splitted_msg:
+        bot.send_message(my_chat_id, m)
 
     print(msg)
 
-bot.polling()
+    
+telegram_get_recommend()
+
 
 # '''get options extreme price'''
 # print(bc.get_extreme_option_price(1666324800000, 'TSLA  230210P00180000', 'SELL'))

@@ -8,7 +8,6 @@ class GsheetController():
         scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
         creds = ServiceAccountCredentials.from_json_keyfile_name('google_creds.json', scope)
         client = gspread.authorize(creds)
-        print(gsheet_name)
         self._sh = client.open(gsheet_name)
 
 
