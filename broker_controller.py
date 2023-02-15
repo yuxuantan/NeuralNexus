@@ -37,6 +37,7 @@ class BrokerController():
 
 
 
+
     def convert_pretty_table(self, data):
         
         table = PrettyTable()
