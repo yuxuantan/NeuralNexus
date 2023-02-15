@@ -1,7 +1,7 @@
 name: "Workflow example"
 on:
   schedule:
-    - cron: '* * * * * *'
+    - cron: '* * * * *'
 
 jobs:
   hello:
