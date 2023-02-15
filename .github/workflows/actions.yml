@@ -27,7 +27,7 @@ jobs:
           
       - name: execute py script # run main.py
         env:
-          SOME_SECRET: ${{ secrets.SOME_SECRET }}
+          TIGER_PRIVATE_KEY: ${{ secrets.TIGER_PRIVATE_KEY }}
         run: python3 main.py
           
       - name: commit files
