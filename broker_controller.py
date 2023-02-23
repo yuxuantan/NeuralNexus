@@ -50,14 +50,17 @@ class BrokerController():
         
 
     def get_extreme_option_price(self, purchase_date, contract, qty):
-
-        dt = datetime.strptime(str(purchase_date), "%Y-%m-%d %H:%M:%S")
+        
+        dt = datetime.strptime(str(purchase_date), "%Y-%m-%d")
         purchase_date_unix = int(dt.timestamp() * 1000)
+        
         df = self._quote_client.get_option_bars([contract])
+        
         if qty > 0:
             extreme_price = df.loc[df['time'] > purchase_date_unix, 'close'].max()
         elif qty < 0:
             extreme_price = df.loc[df['time'] > purchase_date_unix, 'close'].min()
+        
         return extreme_price
 
     def get_current_option_price(self, identifier):
@@ -81,7 +84,6 @@ class BrokerController():
         return segments
 
     
-    # TODO: doing now
     def get_my_recommended_actions(self, positions):
         for pos in positions:
             price = pos.get('price')
@@ -136,7 +138,11 @@ class BrokerController():
         return positions
         
     def get_my_open_pos(self):
-        positions = self._trade_client.get_positions()
+        sectypes = ['STK', 'OPT', 'FUT']
+        positions = []
+        for sectype in sectypes:
+            positions = positions + self._trade_client.get_positions(sec_type = sectype)
+
         positions_dict = []
         
         for pos in positions:

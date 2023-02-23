@@ -17,7 +17,6 @@ bot=telebot.TeleBot("5244204118:AAFLg6BjMqgfv6WNclKVDaIEgKcZhPnK818")
 '''get all positions'''
 def telegram_get_recommend():
     pos = bc.get_my_open_pos()
-    
     ''' incorporate retracement profit taking - get all recommendations'''
     pos_with_recommendations = bc.get_my_recommended_actions(pos)
     print(pos_with_recommendations)
@@ -31,7 +30,7 @@ def telegram_get_recommend():
     for pos in pos_with_recommendations:
         if pos.get('recommendation') is not None:
             output_msg = output_msg + '\n' + pos.get('recommendation') + ' at ' + str(pos.get('stop_loss')) + ', reason: ' + pos.get('reason') 
-    bot.send_message(my_chat_id, output_msg)
+    # bot.send_message(my_chat_id, output_msg)
     # splitted_msg = util.split_string(str(tele_msg), 4000)
     
     # for m in splitted_msg:

@@ -19,6 +19,7 @@ class GsheetController():
 
     def write(self, text, ws_name):
         df = pd.DataFrame.from_dict(text)
+        df.fillna('NA', inplace=True)
         ws = self._sh.worksheet(ws_name)
         ws.update([df.columns.values.tolist()] + df.values.tolist())
         print('gsheet written!')
