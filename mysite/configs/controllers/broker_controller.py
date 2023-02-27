@@ -10,9 +10,10 @@ from prettytable import PrettyTable
 from datetime import datetime, date, timedelta
 import pandas as pd
 
-from yfinance_controller import YFinanceController
-from db_controller import DbController
+from .yfinance_controller import YFinanceController
+from .db_controller import DbController
 import os
+import math
 
 class BrokerController():
     def __init__(self, sandbox=False):
@@ -20,7 +21,7 @@ class BrokerController():
         try:
             self._client_config.private_key = os.environ["TIGER_PRIVATE_KEY"]
         except KeyError:
-            self._client_config.private_key = read_private_key('./tiger_creds.json')
+            self._client_config.private_key = read_private_key('configs/controllers/tiger_creds.json')
 
         self._client_config.tiger_id = "20151980"
         self._client_config.account = '50971581' 
@@ -93,6 +94,8 @@ class BrokerController():
             identifier = contract.split('/')[0]
             contract_type = pos.get('contract').split('/')[1]
             pl_perc = pos.get('pl_perc')
+            
+            self._dbc.create_table()
             entered_date = self._dbc.run_query(f"select entered_date from tbl where contract = '{contract}'")
             if entered_date is None:
                 entered_date = str(datetime.now().date())
@@ -114,10 +117,9 @@ class BrokerController():
             elif qty < 0:
                 pos['stop_loss'] = round(cost * 1.05, 2)
                 target_profit_taking_price = price - (price - max_profit_price) * 0.7
-
-            pos['max_profit_px'] = round(max_profit_price, 2)
-            pos['recommendation'] = None
-            pos['reason'] = None
+    
+            pos['recommendation'] = 'None'
+            pos['reason'] = 'NA'
 
             if qty < 0:
                 action = 'BUYBACK'
@@ -134,7 +136,9 @@ class BrokerController():
                 if price <= target_profit_taking_price:
                     pos['recommendation'] = f"{action} {qty} {identifier} {contract_type}"
                     pos['reason'] = "profit > 10% + retrace 30%"        
-        
+
+            if math.isnan(pos['stop_loss']):
+                pos['stop_loss'] = '-'
         return positions
         
     def get_my_open_pos(self):

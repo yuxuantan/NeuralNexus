@@ -12,7 +12,7 @@ class GsheetController():
             gsheet_creds_dict = json.loads(os.environ["GSHEET_CREDENTIALS"])
             creds = ServiceAccountCredentials.from_json_keyfile_dict(gsheet_creds_dict, scope)
         except KeyError:
-            creds = ServiceAccountCredentials.from_json_keyfile_name('google_creds.json', scope)
+            creds = ServiceAccountCredentials.from_json_keyfile_name('configs/controllers/google_creds.json', scope)
         client = gspread.authorize(creds)
         self._sh = client.open(gsheet_name)
 
@@ -22,5 +22,4 @@ class GsheetController():
         df.fillna('NA', inplace=True)
         ws = self._sh.worksheet(ws_name)
         ws.update([df.columns.values.tolist()] + df.values.tolist())
-        print('gsheet written!')
     
