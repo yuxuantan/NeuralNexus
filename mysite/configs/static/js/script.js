@@ -17,27 +17,27 @@ var csrftoken = getCookie('csrftoken');
 
 $(document).ready(function () {
     $('#my-button3').click(function () {
-        $('#spinner').show();
+        $('#lds-ring').show(100);
         $.ajax({
             url: '/send_tele/',
             type: 'POST',
             headers: { 'X-CSRFToken': csrftoken },
             // data: {'my_data': 'my_value'},
             success: function (response) {
-                $('#spinner').hide();
+                $('#lds-ring').hide();
                 alert("Success! \n\n");
             }
         });
     });
     $('#my-button1').click(function () {
-        $('#spinner').show();
+        $('#lds-ring').show(100);
         $.ajax({
             url: '/get_recs/',
             type: 'POST',
             headers: { 'X-CSRFToken': csrftoken },
             // data: {'my_data': 'my_value'},
             success: function (response) {
-                $('#spinner').hide();
+                $('#lds-ring').hide();
                 console.log(response.result)
 
                 var headerHTML = '<tr>'
