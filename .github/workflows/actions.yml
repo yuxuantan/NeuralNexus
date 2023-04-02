@@ -1,45 +1,45 @@
-name: run main.py
+# name: run main.py
 
-on:
-  # push:
-  #   branches:
-  #     - main
-  schedule:
-    - cron: '0 21 * * *'
+# on:
+#   # push:
+#   #   branches:
+#   #     - main
+#   schedule:
+#     - cron: '0 21 * * *'
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
 
-      - name: checkout repo content
-        uses: actions/checkout@v2 # checkout the repository content to github runner
+#       - name: checkout repo content
+#         uses: actions/checkout@v2 # checkout the repository content to github runner
 
-      - name: setup python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9' # install the python version needed
+#       - name: setup python
+#         uses: actions/setup-python@v4
+#         with:
+#           python-version: '3.9' # install the python version needed
           
-      - name: install python packages
-        run: |
-          python3 -m pip install --upgrade pip
-          pip3 install -r requirements.txt
+#       - name: install python packages
+#         run: |
+#           python3 -m pip install --upgrade pip
+#           pip3 install -r requirements.txt
           
-      - name: execute py script # run main.py
-        env:
-          TIGER_PRIVATE_KEY: ${{ secrets.TIGER_PRIVATE_KEY }}
-          GSHEET_CREDENTIALS: ${{ secrets.GSHEET_CREDENTIALS }}
-        run: python3 main.py
+#       - name: execute py script # run main.py
+#         env:
+#           TIGER_PRIVATE_KEY: ${{ secrets.TIGER_PRIVATE_KEY }}
+#           GSHEET_CREDENTIALS: ${{ secrets.GSHEET_CREDENTIALS }}
+#         run: python3 main.py
           
-      - name: commit files
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add -A
-          git diff-index --quiet HEAD || (git commit -a -m "updated logs" --allow-empty)
+#       - name: commit files
+#         run: |
+#           git config --local user.email "action@github.com"
+#           git config --local user.name "GitHub Action"
+#           git add -A
+#           git diff-index --quiet HEAD || (git commit -a -m "updated logs" --allow-empty)
           
-      - name: push changes
-        uses: ad-m/github-push-action@v0.6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main 
+#       - name: push changes
+#         uses: ad-m/github-push-action@v0.6.0
+#         with:
+#           github_token: ${{ secrets.GITHUB_TOKEN }}
+#           branch: main 
