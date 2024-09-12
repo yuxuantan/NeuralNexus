@@ -1,5 +1,5 @@
 tigeropen
-coinbase
+coinbase-advanced-py
 streamlit
 moralis
 matplotlib
