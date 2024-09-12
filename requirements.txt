@@ -2,3 +2,4 @@ tigeropen
 coinbase
 streamlit
 moralis
+matplotlib
