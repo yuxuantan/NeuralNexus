@@ -45,14 +45,26 @@ class TigerController:
         filled_orders.sort(key=lambda x: x.trade_time, reverse=True)
         return filled_orders
 
-    def get_open_positions(_self):
-        open_positions = _self.trade_client.get_positions()
+    @st.cache_data(ttl="1d")
+    def get_open_positions_stocks(_self):
+        
+        open_positions = _self.trade_client.get_positions(sec_type=SecurityType.STK)
+        return open_positions
+    
+    @st.cache_data(ttl="1d")
+    def get_open_positions_options(_self):
+        open_positions = _self.trade_client.get_positions(sec_type=SecurityType.OPT)
         return open_positions
 
-        
-        
+    @st.cache_data(ttl="1d")
+    def get_cash(_self):
+        assets = _self.trade_client.get_assets()
+        return assets[0].summary.cash
 
 
 if __name__ == "__main__":
     controller = TigerController()
-    filled_orders = controller.get_filled_orders()
+    assets = controller.trade_client.get_assets()
+
+    for asset in assets:
+        print(asset.summary.cash)
