@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 
-
 def open_positions_options(tc, risk_management_settings):
     baseline_portfolio_size_usd = risk_management_settings[
         "baseline_portfolio_size_usd"
@@ -14,10 +13,11 @@ def open_positions_options(tc, risk_management_settings):
     ]  # 0.04
 
     open_positions_options = tc.get_open_positions_options()
+    print(open_positions_options)
     open_positions_options_data = [
         {
             "ticker": str(position.contract).split(" ")[0],
-            "exp": str(position.contract).split(" ")[-1][:6].lstrip("0"),
+            "exp": f"20{str(position.contract).split(' ')[-1][:6].lstrip('0')[:2]}-{str(position.contract).split(' ')[-1][:6].lstrip('0')[2:4]}-{str(position.contract).split(' ')[-1][:6].lstrip('0')[4:6]}",
             "type": "PUT"
             if str(position.contract).split(" ")[-1][6:7] == "P"
             else "CALL",
@@ -56,6 +56,7 @@ def open_positions_options(tc, risk_management_settings):
                 - position.average_cost * position.quantity
             )
             * 100,
+
         }
         for position in open_positions_options
     ]

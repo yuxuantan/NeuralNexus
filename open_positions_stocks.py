@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import datetime
-
+import yfinance as yf
 
 def open_positions_stocks(tc, risk_management_settings):
     baseline_portfolio_size_usd = risk_management_settings[
@@ -47,14 +47,13 @@ def open_positions_stocks(tc, risk_management_settings):
     
     df = df.groupby("contract").apply(calculate_open_date).query("net_qty != 0")
     
-    import yfinance as yf
+    
     # add the max value of the stock after the trade_time until now
     df = df.reset_index()  # Reset the index to access 'contract' as a column
     df["max_value"] = df.apply(
         lambda row: yf.Ticker(row["contract"].replace("/STK/USD", "")).history(start=row["open_date"]).High.max(),
         axis=1
     )
-
 
     # get the data
     open_positions_stocks = tc.get_open_positions_stocks()
@@ -85,7 +84,6 @@ def open_positions_stocks(tc, risk_management_settings):
                 2,
             ),
             "notes": None
-            
             
         }
         for position in open_positions_stocks
