@@ -3,3 +3,4 @@ coinbase-advanced-py
 streamlit
 moralis
 matplotlib
+yfinance
