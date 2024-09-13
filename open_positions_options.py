@@ -101,11 +101,11 @@ def open_positions_options(tc, risk_management_settings):
 
     # CUSTOM NOTES
     for position in open_positions_options_data:
-        if position["ticker"] == "COIN" and position["exp"] =='240927' and position["type"] == 'PUT':
+        if position["ticker"] == "COIN" and position["exp"] =='2024-09-27' and position["type"] == 'PUT':
             position["notes"] = "dont mind owning coin at 180. dont set SL"
-        elif position["ticker"] == "RIVN" and position["exp"] =='241018' and position["type"] == 'CALL':
+        elif position["ticker"] == "RIVN" and position["exp"] =='2024-10-18' and position["type"] == 'CALL':
             position["notes"] = "dont mind selling at 15 dont SL"
-        elif position["ticker"] == "HOOD" and position["exp"] =='240920' and position["type"] == 'CALL':
+        elif position["ticker"] == "HOOD" and position["exp"] =='2024-09-20' and position["type"] == 'CALL':
             position["notes"] = "dont mind selling at 21 dont SL"
         else:
             position["notes"] = "stop loss set✅"
