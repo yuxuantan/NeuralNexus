@@ -29,7 +29,6 @@ crypto_wallet_addresses = list(crypto_wallets.keys())
 
 
 def open_positions_crypto():
-    st.subheader("Open Positions Crypto")
     placeholder_overall_value = st.empty()
     st.divider()
     # COINBASE

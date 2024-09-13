@@ -8,14 +8,6 @@ import utils.utils as utils
 tc = TigerController()
 
 def filled_options():
-    # st.query_params.user_id = user_data['user']['user_id']
-    # ===========  DISPLAY THE SIDEBAR ===========
-    # st.sidebar.title('Broker Configs')
-
-    # # create input for tiger credentials
-    # tiger_account = st.sidebar.text_input('Tiger Account', type='default')
-    # tiger_id = st.sidebar.text_input('Tiger ID', type='default')
-    # tiger_private_key = st.sidebar.text_input('Tiger Private Key', type='password')
 
     # ===========  GET THE DATA ===========
 
@@ -64,19 +56,13 @@ def filled_options():
 
     # ===========  DISPLAY THE CALCULATED HEADER METRICS ===========
     col1, col2, col3 = st.columns([2, 1, 1])
-    with col1:
-        st.subheader('Filled Options')
+
     with col3:
         # add a button to clear cache st.cache_data.clear()
         if st.button('Refresh Data'):
             st.cache_data.clear()
             st.write('Cache cleared')
             st.rerun()
-    # with col3:
-        # granularity
-
-    st.divider()
-
 
     col1, col2, col3 = st.columns([1,1,1])
     with col1:

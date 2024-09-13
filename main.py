@@ -1,19 +1,33 @@
 
 from filled_options import filled_options
 from filled_stocks import filled_stocks
-from open_positions_stocks import open_positions_stocks
-from open_positions_options import open_positions_options
-from open_positions_crypto import open_positions_crypto
 from utils.tiger_controller import TigerController
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+
+st.set_page_config(layout="wide")
+from open_positions_stocks import open_positions_stocks
+from open_positions_options import open_positions_options
+from open_positions_crypto import open_positions_crypto
 
 tc = TigerController()
 
 sgd_to_usd_exchange_rate = 1.30
 
 st.title("Neural Nexus")
+
+st.sidebar.subheader("Risk Management Settings")
+baseline_portfolio_size_usd = st.sidebar.number_input("Baseline Portfolio Size USD", value=38333, step=1000)
+max_loss_percentage_per_trade = st.sidebar.number_input("Max Loss Percentage Per Trade", value=0.02, step=0.01)
+target_profit_percentage_per_trade = st.sidebar.number_input("Target Profit Percentage Per Trade", value=0.04, step=0.01)
+
+risk_management_settings = {
+    "baseline_portfolio_size_usd": baseline_portfolio_size_usd,
+    "max_loss_percentage_per_trade": max_loss_percentage_per_trade,
+    "target_profit_percentage_per_trade": target_profit_percentage_per_trade,
+}
+
 (
     overall_tab,
     open_pos_stks_tab,
@@ -33,8 +47,6 @@ st.title("Neural Nexus")
 )
 
 with overall_tab:
-    st.header("Overall Portfolio")
-    st.divider()
     tiger_cash = round(tc.get_cash() * sgd_to_usd_exchange_rate, 2)
     ocbc_cash = 167944
     dbs_cash = 1597
@@ -60,10 +72,10 @@ with overall_tab:
 
 
 with open_pos_stks_tab:
-    stocks_value_sgd = round(open_positions_stocks(tc) * sgd_to_usd_exchange_rate, 2)
+    stocks_value_sgd = round(open_positions_stocks(tc, risk_management_settings) * sgd_to_usd_exchange_rate, 2)
     
 with open_pos_options_tab:
-    options_value_sgd = round(open_positions_options(tc) * sgd_to_usd_exchange_rate, 2)
+    options_value_sgd = round(open_positions_options(tc, risk_management_settings) * sgd_to_usd_exchange_rate, 2)
 
 with open_pos_crypto_tab:
     crypto_value_sgd = round(open_positions_crypto() * sgd_to_usd_exchange_rate, 2)

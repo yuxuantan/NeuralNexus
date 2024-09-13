@@ -64,7 +64,7 @@ class TigerController:
 
 if __name__ == "__main__":
     controller = TigerController()
-    assets = controller.trade_client.get_assets()
-
-    for asset in assets:
-        print(asset.summary.cash)
+    assets = controller.trade_client.get_analytics_asset()
+    import json
+    # for asset in assets:
+    print(json.dumps(assets, indent=4))

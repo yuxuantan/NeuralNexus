@@ -20,8 +20,6 @@ def filled_stocks(tc):
 
 
     stk_col1, stk_col2 = st.columns([2, 1])
-    with stk_col1:
-        st.subheader("Filled Stocks")
     with stk_col2:
         option2 = st.selectbox(
             "View", ("All", "Month on Month", "Year on Year"), key="option2"
