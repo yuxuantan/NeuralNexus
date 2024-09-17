@@ -71,3 +71,5 @@ def filled_stocks(tc):
         st.dataframe(
             filled_stocks_df.sort_values(by="trade_time", ascending=False), hide_index=True
         )
+
+    return total_pnl

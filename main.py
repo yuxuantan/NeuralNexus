@@ -13,7 +13,7 @@ from open_positions_crypto import open_positions_crypto
 
 tc = TigerController()
 
-sgd_to_usd_exchange_rate = 1.30
+usd_to_sgd_exchange_rate = 1.30
 
 st.title("Neural Nexus")
 
@@ -47,7 +47,7 @@ risk_management_settings = {
 )
 
 with overall_tab:
-    tiger_cash = round(tc.get_cash() * sgd_to_usd_exchange_rate, 2)
+    tiger_cash = round(tc.get_cash() * usd_to_sgd_exchange_rate, 2)
     ocbc_cash = 167944
     dbs_cash = 1597
 
@@ -56,15 +56,18 @@ with overall_tab:
         "Amount_SGD": [tiger_cash, ocbc_cash, dbs_cash],
     }
 
-    col1, col2 = st.columns([1, 1])
+    col1, col2, col3 = st.columns([1, 1, 1])
     with col1:
         placeholder_total_portfolio_value = st.empty()
         st.divider()
         placeholder_portfolio_df = st.empty()
     with col2:
-        st.metric("USD to SGD", sgd_to_usd_exchange_rate)
+        placeholder_overall_pnl = st.empty()
         st.divider()
         placeholder_pie_chart = st.empty()
+    with col3:
+        st.metric("USD to SGD", usd_to_sgd_exchange_rate)
+        st.divider()
 
     st.divider()
     
@@ -72,22 +75,25 @@ with overall_tab:
 
 
 with open_pos_stks_tab:
-    stocks_value_sgd = round(open_positions_stocks(tc, risk_management_settings) * sgd_to_usd_exchange_rate, 2)
+    stocks_value_sgd = round(open_positions_stocks(tc, risk_management_settings) * usd_to_sgd_exchange_rate, 2)
     
 with open_pos_options_tab:
-    options_value_sgd = round(open_positions_options(tc, risk_management_settings) * sgd_to_usd_exchange_rate, 2)
+    options_value_sgd = round(open_positions_options(tc, risk_management_settings) * usd_to_sgd_exchange_rate, 2)
 
 with open_pos_crypto_tab:
-    crypto_value_sgd = round(open_positions_crypto() * sgd_to_usd_exchange_rate, 2)
+    crypto_value_sgd = round(open_positions_crypto() * usd_to_sgd_exchange_rate, 2)
 
 with filled_opt_tab:
-    filled_options()
+    pnl_options = round(filled_options() * usd_to_sgd_exchange_rate, 2)
     
 with filled_stk_tab:
-    filled_stocks(tc)
+    pnl_stocks = round(filled_stocks(tc) * usd_to_sgd_exchange_rate, 2) 
 
 total_portfolio_value = round(tiger_cash+ocbc_cash+dbs_cash+stocks_value_sgd+options_value_sgd+crypto_value_sgd, 2)
+overall_pnl = round(pnl_options + pnl_stocks, 2)
+
 placeholder_total_portfolio_value.metric("TOTAL portfolio SGD", str(total_portfolio_value))
+placeholder_overall_pnl.metric("Overall PnL SGD (without crypto)", str(overall_pnl))
 # draw pie chart for breakdown
 labels = ["Tiger Cash", "OCBC Cash", "DBS Cash", "Stocks Value", "Crypto Value"]
 sizes = [tiger_cash, ocbc_cash, dbs_cash, stocks_value_sgd, crypto_value_sgd]

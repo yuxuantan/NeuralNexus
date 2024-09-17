@@ -57,7 +57,7 @@ def open_positions_crypto():
     
 
     total_market_value_all_usd = total_market_value + total_market_value_coinbase
-    placeholder_overall_value.metric("Total Market Value USD", total_market_value_all_usd)
+    placeholder_overall_value.metric("Total Market Value USD", round(total_market_value_all_usd, 2))
 
 
     return total_market_value_all_usd

@@ -136,6 +136,9 @@ def filled_options():
     elif selected_filter == 'All':
         st.subheader('All trades')
         st.dataframe(options_df, hide_index=True)
+    
+
+    return total_pnl
 
 
 
