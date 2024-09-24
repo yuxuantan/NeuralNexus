@@ -1,7 +1,7 @@
 from moralis import evm_api
 import streamlit as st
 
-@st.cache_data(ttl="1d")
+@st.cache_data(ttl="1h")
 def get_wallet_token_balances_price(wallet_address_list):
     api_key = st.secrets['MORALIS_API_KEY']
     output = []

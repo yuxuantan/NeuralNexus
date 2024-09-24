@@ -30,8 +30,13 @@ def open_positions_options(tc, risk_management_settings):
             / 1000,
             "quantity": position.quantity,
             "average_cost": round(position.average_cost, 2),
-            "market_price": round(position.market_price, 2),
             "market_value": position.market_price * position.quantity * 100,
+            "pnl": (
+                position.market_price * position.quantity
+                - position.average_cost * position.quantity
+            )
+            * 100,
+            "market_price": round(position.market_price, 2),
             "stop_loss_px": round(
                 position.average_cost
                 - baseline_portfolio_size_usd
@@ -40,10 +45,9 @@ def open_positions_options(tc, risk_management_settings):
                 / 100,
                 2,
             ),
-            "stop_loss_explanation": "based on risk management settings max_loss_percentage_per_trade",
-            "target_profit_px": round(position.average_cost * 0.25, 2)
+            "target_profit_px": round(position.average_cost * 0.25, 2) # 75% profit of premium if short
             if position.quantity < 0
-            else round(
+            else round( # follow target profit if long
                 position.average_cost
                 + baseline_portfolio_size_usd
                 * target_profit_percentage_per_trade
@@ -51,11 +55,6 @@ def open_positions_options(tc, risk_management_settings):
                 / 100,
                 2,
             ),
-            "pnl": (
-                position.market_price * position.quantity
-                - position.average_cost * position.quantity
-            )
-            * 100,
 
         }
         for position in open_positions_options
@@ -74,41 +73,26 @@ def open_positions_options(tc, risk_management_settings):
 
 
     for position in open_positions_options_data:
-        if position["quantity"] < 0:  # shorts = collect premium = 75%
-            if position["market_price"] < position["target_profit_px"]:
-                position["stop_loss_px"] = position["target_profit_px"]
-                position["stop_loss_explanation"] = (
-                    "market price is below target_profit_px"
-                )
-        else:  # longs = after hitting target price, retrace 20% stop loss
-            if position["market_price"] > position["target_profit_px"]:
-                position["stop_loss_px"] = position["target_profit_px"]
-                position["stop_loss_explanation"] = (
-                    "market price is above target_profit_px"
-                )
+        if position["quantity"] < 0 and position["market_price"] < position["target_profit_px"]:  # shorts # take profit! = collect 75% of premium
+            position["notes"] = (
+                "⚠️ [target_profit_px] - already hit target profit of 75% premium"
+            )
+        elif position["quantity"] > 0 and position["market_price"] > position["target_profit_px"]:  # longs = after hitting target price, take profit
+            # TODO: profit retracement strategy for long positions not done yet.
+            position["notes"] = (
+                "⚠️ [target_profit_px] - market price is above target_profit_px"
+            )
+        elif (position["quantity"] < 0 and position["target_profit_px"] <= position["market_price"] <= position["stop_loss_px"]) or (position["quantity"] > 0 and position["target_profit_px"] >= position["market_price"] >= position["stop_loss_px"]):
+            position["notes"] = "[stop_loss_px] - market price is between target_profit_px and stop_loss_px"
+        else:
+            position["notes"] = "DANGER ⚠️ [stop_loss_px] - market price is outside of stop_loss_px. Need to close this position"
 
-                if position["market_price"] * 0.8 > position["stop_loss_px"]:
-                    position["stop_loss_px"] = position["market_price"] * 0.8
-                    position["stop_loss_explanation"] = (
-                        "market price is >20% above min_take_profit_px, stop loss adjusted to 20% retracement of market price"
-                    )
-
-    # remove unused columns
-    open_positions_options_data = [
-        {k: v for k, v in position.items() if k not in ["target_profit_px"]}
-        for position in open_positions_options_data
-    ]
 
     # CUSTOM NOTES
     for position in open_positions_options_data:
         if position["ticker"] == "COIN" and position["exp"] =='2024-09-27' and position["type"] == 'PUT':
             position["notes"] = "dont mind owning coin at 180. dont set SL"
-        elif position["ticker"] == "RIVN" and position["exp"] =='2024-10-18' and position["type"] == 'CALL':
-            position["notes"] = "dont mind selling at 15 dont SL"
-        elif position["ticker"] == "HOOD" and position["exp"] =='2024-09-20' and position["type"] == 'CALL':
-            position["notes"] = "dont mind selling at 21 dont SL"
-        else:
-            position["notes"] = "stop loss set✅"
+
     
 
     st.dataframe(pd.DataFrame(open_positions_options_data), hide_index=True)

@@ -21,7 +21,7 @@ class TigerController:
         trade_client = TradeClient(config)
         return trade_client
 
-    @st.cache_data(ttl="1d")
+    @st.cache_data(ttl="1h")
     def get_orders(_self, sec_type = SecurityType.ALL, start_date = datetime.datetime.now()-datetime.timedelta(days=30), end_date = datetime.datetime.now().date()):
 
         date_diff_days = (end_date - start_date).days
@@ -45,18 +45,18 @@ class TigerController:
         filled_orders.sort(key=lambda x: x.trade_time, reverse=True)
         return filled_orders
 
-    @st.cache_data(ttl="1d")
+    @st.cache_data(ttl="1h")
     def get_open_positions_stocks(_self):
         
         open_positions = _self.trade_client.get_positions(sec_type=SecurityType.STK)
         return open_positions
     
-    @st.cache_data(ttl="1d")
+    @st.cache_data(ttl="1h")
     def get_open_positions_options(_self):
         open_positions = _self.trade_client.get_positions(sec_type=SecurityType.OPT)
         return open_positions
 
-    @st.cache_data(ttl="1d")
+    @st.cache_data(ttl="1h")
     def get_cash(_self):
         assets = _self.trade_client.get_assets()
         return assets[0].summary.cash

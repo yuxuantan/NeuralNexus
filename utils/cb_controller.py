@@ -2,6 +2,8 @@
 
 from coinbase.rest import RESTClient
 import streamlit as st
+
+@st.cache_data(ttl="1h")
 def get_coinbase_balance():
     api_key = st.secrets['COINBASE_API_KEY']
     api_secret = st.secrets['COINBASE_API_SECRET']

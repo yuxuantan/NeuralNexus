@@ -95,12 +95,12 @@ overall_pnl = round(pnl_options + pnl_stocks, 2)
 placeholder_total_portfolio_value.metric("TOTAL portfolio SGD", str(total_portfolio_value))
 placeholder_overall_pnl.metric("Overall PnL SGD (without crypto)", str(overall_pnl))
 # draw pie chart for breakdown
-labels = ["Tiger Cash", "OCBC Cash", "DBS Cash", "Stocks Value", "Crypto Value"]
-sizes = [tiger_cash, ocbc_cash, dbs_cash, stocks_value_sgd, crypto_value_sgd]
-fig1, ax1 = plt.subplots()
-ax1.pie(sizes, labels=labels, autopct="%1.1f%%", startangle=90)
-ax1.axis("equal")
-placeholder_pie_chart.pyplot(fig1)
+# labels = ["Tiger Cash", "OCBC Cash", "DBS Cash", "Stocks Value", "Crypto Value"]
+# sizes = [tiger_cash, ocbc_cash, dbs_cash, stocks_value_sgd, crypto_value_sgd]
+# fig1, ax1 = plt.subplots()
+# ax1.pie(sizes, labels=labels, autopct="%1.1f%%", startangle=90)
+# ax1.axis("equal")
+# placeholder_pie_chart.pyplot(fig1)
 
 portfolio_data["Category"].append("Stocks Value SGD")
 portfolio_data["Amount_SGD"].append(stocks_value_sgd)
