@@ -19,14 +19,7 @@ output_msg_stk = "*Stocks_data*"
 for data in stock_data:
     output_msg_stk += f"""
 Contract: {data["contract"]}
-Quantity: {data["quantity"]}
-Average Cost: {data["average_cost"]}
-Market Value: {data["market_value"]}
-PnL: {data["pnl"]}
-Market Price: {data["market_price"]}
-Stop Loss Price: {data["stop_loss_px"]}
-Target Profit Price: {data["target_profit_px"]}
-Notes: {data["notes"]}
+Action: {data["notes"]}
 """
     
 # Escape special characters in the message to avoid parsing errors
@@ -46,15 +39,7 @@ for data in options_data:
     output_msg_opt += f"""
 Ticker: {data["ticker"]}
 Exp: {data["exp"]}
-Type: {data["type"]}
-Strike: {data["strike"]}
-Quantity: {data["quantity"]}
-Average Cost: {data["average_cost"]}
-Market Value: {data["market_value"]}
-PnL: {data["pnl"]}
-Market Price: {data["market_price"]}
-Stop Loss Price: {data["stop_loss_px"]}
-Target Profit Price: {data["target_profit_px"]}
+Action: {data["notes"]}
 """
     
 output_msg_opt = escape_special_characters(output_msg_opt)
