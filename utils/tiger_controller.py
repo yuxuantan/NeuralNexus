@@ -3,6 +3,7 @@ from tigeropen.tiger_open_config import TigerOpenClientConfig
 from tigeropen.common.consts import SecurityType, Market
 import datetime
 import streamlit as st
+import os
 
 class TigerController:
     def __init__(_self, credentials_dict={}):
@@ -11,9 +12,15 @@ class TigerController:
     def create_trade_client(_self, credentials_dict):
         config = TigerOpenClientConfig(sandbox_debug=None, enable_dynamic_domain=True,props_path=None)
         if credentials_dict.get('tiger_private_key') is None or credentials_dict.get('tiger_account') is None or credentials_dict.get('tiger_id') is None:
-            config.private_key = st.secrets['TIGER_PRIVATE_KEY']
-            config.account = st.secrets['TIGER_ACCOUNT']
-            config.tiger_id = st.secrets['TIGER_ID']
+            try:
+                config.private_key = st.secrets['TIGER_PRIVATE_KEY']
+                config.account = st.secrets['TIGER_ACCOUNT']
+                config.tiger_id = st.secrets['TIGER_ID']
+            except FileNotFoundError:
+                config.private_key = os.getenv('TIGER_PRIVATE_KEY')
+                config.account = os.getenv('TIGER_ACCOUNT')
+                config.tiger_id = os.getenv('TIGER_ID')
+    
         else:
             config.private_key = credentials_dict['tiger_private_key']
             config.account = credentials_dict['tiger_account']
