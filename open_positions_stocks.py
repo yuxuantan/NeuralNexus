@@ -207,6 +207,32 @@ def open_positions_stocks(tc, risk_management_settings):
 
     st.dataframe(pd.DataFrame(open_positions_stocks_data), hide_index=True)
 
+    # plot bar graph of long positions vs short positions
+    long_positions = sum(
+        position["market_value"]
+        for position in open_positions_stocks_data
+        if position["quantity"] > 0
+    )
+    short_positions = abs(
+        sum(
+            position["market_value"]
+            for position in open_positions_stocks_data
+            if position["quantity"] < 0
+        )
+    )
+
+    st.bar_chart(
+        pd.DataFrame(
+            {
+                "Position Type": ["Long", "Short"],
+                "Market Value": [long_positions, short_positions],
+            }
+        ).set_index("Position Type"),
+        use_container_width=False,
+        width=500,
+        horizontal=True
+    )
+
     # plot the pie chart of open positions
     # labels = [position["contract"] for position in open_positions_stocks_data]
     # sizes = [position["market_value"] for position in open_positions_stocks_data]
@@ -215,4 +241,4 @@ def open_positions_stocks(tc, risk_management_settings):
     # ax1.axis("equal")
     # st.pyplot(fig1)
 
-    return total_market_value
+    return total_market_value, open_positions_stocks_data

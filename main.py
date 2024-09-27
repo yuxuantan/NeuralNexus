@@ -5,6 +5,7 @@ from utils.tiger_controller import TigerController
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import yfinance as yf
 
 st.set_page_config(layout="wide")
 from open_positions_stocks import open_positions_stocks
@@ -60,14 +61,25 @@ with overall_tab:
     with col1:
         placeholder_total_portfolio_value = st.empty()
         st.divider()
+        st.metric("USD to SGD", usd_to_sgd_exchange_rate)
+        st.divider()
         placeholder_portfolio_df = st.empty()
     with col2:
         placeholder_overall_pnl = st.empty()
         st.divider()
+        # show vix price using yfinance
+        vix = yf.Ticker("^VIX")
+        vix_price = vix.history(period="1d")["Close"].values[0]
+        st.metric("VIX Price", round(vix_price, 2))
+        if vix_price >= 21:
+            st.error("VIX is above 21! market is fearful. Time to go long")
+        elif vix_price <= 13:
+            st.error("VIX is below 13! market is greedy. Time to go short")
+        else:
+            st.success("VIX is between 13 and 21. Market is neutral")
         placeholder_pie_chart = st.empty()
-    with col3:
-        st.metric("USD to SGD", usd_to_sgd_exchange_rate)
-        st.divider()
+    # with col3:
+        # st.divider()
 
     st.divider()
     
@@ -75,10 +87,12 @@ with overall_tab:
 
 
 with open_pos_stks_tab:
-    stocks_value_sgd = round(open_positions_stocks(tc, risk_management_settings) * usd_to_sgd_exchange_rate, 2)
+    mkt_value, df = open_positions_stocks(tc, risk_management_settings)
+    stocks_value_sgd = round(mkt_value * usd_to_sgd_exchange_rate, 2)
     
 with open_pos_options_tab:
-    options_value_sgd = round(open_positions_options(tc, risk_management_settings) * usd_to_sgd_exchange_rate, 2)
+    mkt_value, df = open_positions_options(tc, risk_management_settings)
+    options_value_sgd = round(mkt_value * usd_to_sgd_exchange_rate, 2)
 
 with open_pos_crypto_tab:
     crypto_value_sgd = round(open_positions_crypto() * usd_to_sgd_exchange_rate, 2)
