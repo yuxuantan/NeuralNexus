@@ -49,12 +49,13 @@ risk_management_settings = {
 
 with overall_tab:
     tiger_cash = round(tc.get_cash() * usd_to_sgd_exchange_rate, 2)
-    ocbc_cash = 167944
-    dbs_cash = 1597
+    ocbc_cash = 17095
+    dbs_cash = 3437
+    trust_cash = 150139
 
     portfolio_data = {
-        "Category": ["Tiger Cash", "OCBC Cash", "DBS Cash"],
-        "Amount_SGD": [tiger_cash, ocbc_cash, dbs_cash],
+        "Category": ["Tiger Cash", "OCBC Cash", "DBS Cash", "Trust Cash"],
+        "Amount_SGD": [tiger_cash, ocbc_cash, dbs_cash, trust_cash],
     }
 
     col1, col2, col3 = st.columns([1, 1, 1])
