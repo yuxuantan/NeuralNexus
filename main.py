@@ -70,8 +70,11 @@ with overall_tab:
         st.divider()
         # show vix price using yfinance
         vix = yf.Ticker("^VIX")
-        vix_price = vix.history(period="1d")["Close"].values[0]
-        st.metric("VIX Price", round(vix_price, 2))
+        vix_history = vix.history(period="1d")
+        if not vix_history.empty:
+            vix_price = vix_history["Close"].values[0]
+        else:
+            vix_price = 0  # or handle the error as needed st.metric("VIX Price", round(vix_price, 2))
         if vix_price >= 21:
             st.error("VIX is above 21! market is fearful. Time to go long")
         elif vix_price <= 13:
