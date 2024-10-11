@@ -176,12 +176,12 @@ def open_positions_stocks(tc, risk_management_settings):
     # CUSTOM NOTES - for special cases
     for position in open_positions_stocks_data:
         #     # HOOD notes)
-        # if position["contract"] == "HOOD":
-        #     position["notes"] = ""
-        # if position["contract"] == "RIVN":
-        #     position["notes"] = "Need to set stop loss"
-        # else:
-        print("Nothing to overrride for ", position["contract"])
+        if position["contract"] == "MARA":
+            position["notes"] = "Hold. Average target price 21.44"
+        if position["contract"] == "COIN":
+            position["notes"] = "Dont mind holding on. Bullish on COIN. average target price 255.78"
+        else:
+            print("Nothing to overrride for ", position["contract"])
 
     # drop the target_profit_px, open_date column that are not needed
     open_positions_stocks_data = [

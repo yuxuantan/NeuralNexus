@@ -108,17 +108,6 @@ def open_positions_options(tc, risk_management_settings):
                 "DANGER ⚠️ [stop_loss_px] - market price is outside of stop_loss_px. Need to close this position"
             )
 
-    # CUSTOM NOTES
-    for position in open_positions_options_data:
-        if position["ticker"] == "COIN":
-            position["notes"] = "dont mind owning coin at 180. dont set SL"
-        elif position["ticker"] == "RIVN":
-            position["notes"] = "dont mind owning rivn at 11. dont set SL"
-        elif position["ticker"] == "HOOD":
-            position["notes"] = "dont mind getting rid of hood at 24. dont set SL"
-
-    st.dataframe(pd.DataFrame(open_positions_options_data), hide_index=True)
-
     # plot bar graph of long positions vs short positions
     long_positions = abs(
         sum(
@@ -141,6 +130,22 @@ def open_positions_options(tc, risk_management_settings):
         )
     )
 
+    # CUSTOM NOTES
+    for position in open_positions_options_data:
+        if position["ticker"] == "COIN" and position["type"] == "PUT":
+            position["notes"] = (
+                "dont mind owning coin at 170. dont set SL. long term exp"
+            )
+        elif position["ticker"] == "COIN" and position["type"] == "CALL":
+            position["notes"] = (
+                "dont mind selling coin at 182.5 for 0 stock loss. short term exp = low risk"
+            )
+        elif position["ticker"] == "RIVN":
+            position["notes"] = "dont mind owning rivn at 11. dont set SL"
+        elif position["ticker"] == "MARA":
+            position["notes"] = "dont mind getting rid of MARA at 17.5"
+
+    st.dataframe(pd.DataFrame(open_positions_options_data), hide_index=True)
     st.bar_chart(
         pd.DataFrame(
             {
