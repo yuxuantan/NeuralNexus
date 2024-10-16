@@ -14,7 +14,6 @@ def open_positions_options(tc, risk_management_settings):
     ]  # 0.04
 
     open_positions_options = tc.get_open_positions_options()
-    print(open_positions_options)
     open_positions_options_data = [
         {
             "ticker": str(position.contract).split(" ")[0],

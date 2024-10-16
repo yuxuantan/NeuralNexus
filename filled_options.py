@@ -35,6 +35,8 @@ def filled_options():
         net_qty_now = ('qty_filled', 'sum')
     )
     options_agg_df.reset_index(inplace=True)
+    # exclude invalid contracts where format is not as expected
+    options_agg_df = options_agg_df[options_agg_df['contract'].apply(lambda x: len(x.split('  ')) >= 2)]
     options_agg_df[['symbol', 'expiry', 'strike', 'option_type']] = options_agg_df['contract'].apply(lambda x: pd.Series(utils.parse_contract(x)))
     # Group by time interval (e.g., 1 minute) to identify strategies
     options_agg_df['trade_time_group'] = options_agg_df['trade_time'].dt.floor('T')

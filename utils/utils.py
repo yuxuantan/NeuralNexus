@@ -9,10 +9,13 @@ def get_cumulative_sum_x_days_ago(df, x_days_ago, time_col='trade_time', value_c
     return x_days_ago_sum
 
 
+#already expects valid contract
 def parse_contract(contract_str):
     # Example contract string: 'COIN  240823P00197500/OPT/USD'. symbol = COIN, expiry = 24 Aug 2023, strike = 197.5, option_type = PUT
+    print(contract_str)
     contract_str = contract_str.replace('/OPT/USD', '')
     symbol = contract_str.split('  ')[0]
+    
     expiry = contract_str.split('  ')[1][:6]
     strike = contract_str.split('  ')[1][-8:]
     option_type = 'CALL' if contract_str.split('  ')[1][6:7] == 'C' else 'PUT'
@@ -51,10 +54,14 @@ def identify_strategy(group):
 
 # Function to calculate capital used based on strategy
 def calculate_capital_used(row):
+    # if invalid columns, return None
     if row['strategy'] == 'Long Call' or row['strategy'] == 'Long Put':
         return abs(row['opening_qty']) * row['opening_avg_fill_price'] *100  # Simplified as premium paid
     elif row['strategy'] == 'Short Call' or row['strategy'] == 'Short Put':
-        return abs(row['opening_qty']) * (float(row['strike']) / 1000 - row['opening_avg_fill_price']) *100 # Simplified margin
+        if row['strike']:
+            return abs(row['opening_qty']) * (float(row['strike']) / 1000 - row['opening_avg_fill_price']) *100 # Simplified margin
+        else:
+            return None
     # elif row['strategy'] == 'Vertical Spread':
     #     return abs(row['qty_filled']) * (row['contract'] - row['contract'])  # Difference in strikes
     # elif row['strategy'] == 'Iron Condor':
