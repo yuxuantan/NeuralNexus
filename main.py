@@ -14,7 +14,7 @@ from open_positions_crypto import open_positions_crypto
 
 tc = TigerController()
 
-usd_to_sgd_exchange_rate = 1.30
+usd_to_sgd_exchange_rate = 1.34
 
 st.title("Neural Nexus")
 
@@ -49,9 +49,9 @@ risk_management_settings = {
 
 with overall_tab:
     tiger_cash = round(tc.get_cash() * usd_to_sgd_exchange_rate, 2)
-    ocbc_cash = 17095
-    dbs_cash = 3437
-    trust_cash = 150139
+    ocbc_cash = 14964
+    dbs_cash = 2325
+    trust_cash = 150079
 
     portfolio_data = {
         "Category": ["Tiger Cash", "OCBC Cash", "DBS Cash", "Trust Cash"],
