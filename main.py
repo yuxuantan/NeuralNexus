@@ -49,14 +49,15 @@ risk_management_settings = {
 
 with overall_tab:
     tiger_cash = round(tc.get_cash() * usd_to_sgd_exchange_rate, 2)
-    ocbc_cash = 14964
-    dbs_cash = 2325
-    trust_cash = 150079
+    ocbc_cash = 24301
+    dbs_cash = 7283
+    trust_cash = 125267
+    ibkr_value = 10221
     owe_mom_investment_fund = -100000
 
     portfolio_data = {
-        "Category": ["Tiger Cash", "OCBC Cash", "DBS Cash", "Trust Cash", "Owe mom investment fund"],
-        "Amount_SGD": [tiger_cash, ocbc_cash, dbs_cash, trust_cash, owe_mom_investment_fund],
+        "Category": ["Tiger Cash", "OCBC Cash", "DBS Cash", "Trust Cash", "IBKR value", "Owe mom investment fund"],
+        "Amount_SGD": [tiger_cash, ocbc_cash, dbs_cash, trust_cash, ibkr_value, owe_mom_investment_fund],
     }
 
     col1, col2, col3 = st.columns([1, 1, 1])
@@ -104,7 +105,7 @@ with filled_opt_tab:
 with filled_stk_tab:
     pnl_stocks = round(filled_stocks(tc) * usd_to_sgd_exchange_rate, 2) 
 
-total_portfolio_value = round(tiger_cash+ocbc_cash+dbs_cash+trust_cash+stocks_value_sgd+options_value_sgd+crypto_value_sgd+owe_mom_investment_fund, 2)
+total_portfolio_value = round(tiger_cash+ocbc_cash+dbs_cash+trust_cash+stocks_value_sgd+options_value_sgd+crypto_value_sgd+owe_mom_investment_fund +ibkr_value, 2)
 overall_pnl = round(pnl_options + pnl_stocks, 2)
 
 placeholder_total_portfolio_value.metric("TOTAL portfolio SGD", str(total_portfolio_value))
