@@ -52,7 +52,7 @@ with overall_tab:
     ocbc_cash = 24301
     dbs_cash = 7283
     trust_cash = 125267
-    ibkr_value = 10501
+    ibkr_value = 11460
     owe_mom_investment_fund = -100000
 
     portfolio_data = {
