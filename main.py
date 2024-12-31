@@ -49,10 +49,10 @@ risk_management_settings = {
 
 with overall_tab:
     tiger_cash = round(tc.get_cash() * usd_to_sgd_exchange_rate, 2)
-    ocbc_cash = 24301
-    dbs_cash = 7283
-    trust_cash = 125267
-    ibkr_value = 11460
+    ocbc_cash = 23588
+    dbs_cash = 4397
+    trust_cash = 124188
+    ibkr_value = 9905
     owe_mom_investment_fund = -100000
 
     portfolio_data = {
